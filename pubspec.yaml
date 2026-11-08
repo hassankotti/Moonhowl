@@ -7,3 +7,4 @@ environment:
 workspace:
   - packages/howl_core
   - packages/howl_net
+  - apps/mobile

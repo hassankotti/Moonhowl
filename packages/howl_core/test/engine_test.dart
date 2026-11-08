@@ -50,6 +50,18 @@ void main() {
       expect(g.phase, Phase.night);
     });
 
+    test('auto roles scale with the player count', () {
+      final s = GameSettings();
+      expect(s.autoRoles, isTrue);
+      expect(s.validateFor(5), isNull);
+      expect(s.rolesFor(5)[Role.wolf], 1);
+      expect(s.rolesFor(12)[Role.wolf], 3);
+      for (var n = GameSettings.minPlayers; n <= GameSettings.maxPlayers; n++) {
+        expect(s.validateFor(n), isNull, reason: '$n players');
+      }
+      expect(s.copyWith(roles: {Role.wolf: 1}).autoRoles, isFalse);
+    });
+
     test('narrator host gets no role', () {
       final g = GameEngine(hostId: 'p0', random: Random(3));
       for (var i = 0; i < 6; i++) {

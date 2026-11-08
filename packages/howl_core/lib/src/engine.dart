@@ -135,7 +135,7 @@ class GameEngine {
 
     _reset();
     final pool = <Role>[
-      for (final e in settings.roles.entries)
+      for (final e in settings.rolesFor(rolePlayerCount).entries)
         if (e.key != Role.villager) ...List.filled(e.value, e.key),
     ];
     final holders = <Player>[];

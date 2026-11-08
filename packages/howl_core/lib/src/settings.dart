@@ -14,10 +14,19 @@ class GameSettings {
     this.deadSeeRoles = true,
     this.allowPrivateChats = true,
     this.publicVotes = true,
-  }) : roles = roles ?? defaultRolesFor(8);
+    bool? autoRoles,
+  })  : roles = roles ?? const {},
+        autoRoles = autoRoles ?? roles == null;
 
-  /// Count of each special role. Players left over become villagers.
+  /// Count of each special role chosen by the host. Players left over
+  /// become villagers. Ignored while [autoRoles] is on.
   final Map<Role, int> roles;
+
+  /// Pick a balanced role set for however many players are in the room.
+  final bool autoRoles;
+
+  /// The roles a game with [players] players would actually use.
+  Map<Role, int> rolesFor(int players) => autoRoles ? defaultRolesFor(players) : roles;
   final int nightSeconds;
   final int witchSeconds;
   final int discussionSeconds;
@@ -52,7 +61,7 @@ class GameSettings {
     }..removeWhere((_, n) => n == 0);
   }
 
-  int get specialRoleCount =>
+  static int specialCount(Map<Role, int> roles) =>
       roles.entries.where((e) => e.key != Role.villager).fold(0, (s, e) => s + e.value);
 
   /// Returns an error code if these settings cannot start a game for
@@ -60,9 +69,10 @@ class GameSettings {
   String? validateFor(int playerCount) {
     if (playerCount < minPlayers) return 'notEnoughPlayers';
     if (playerCount > maxPlayers) return 'tooManyPlayers';
+    final roles = rolesFor(playerCount);
     final wolves = roles[Role.wolf] ?? 0;
     if (wolves < 1) return 'needWolf';
-    if (specialRoleCount > playerCount) return 'tooManyRoles';
+    if (specialCount(roles) > playerCount) return 'tooManyRoles';
     if (wolves * 2 >= playerCount) return 'tooManyWolves';
     return null;
   }
@@ -79,9 +89,11 @@ class GameSettings {
     bool? deadSeeRoles,
     bool? allowPrivateChats,
     bool? publicVotes,
+    bool? autoRoles,
   }) =>
       GameSettings(
         roles: roles ?? Map.of(this.roles),
+        autoRoles: autoRoles ?? (roles != null ? false : this.autoRoles),
         nightSeconds: nightSeconds ?? this.nightSeconds,
         witchSeconds: witchSeconds ?? this.witchSeconds,
         discussionSeconds: discussionSeconds ?? this.discussionSeconds,
@@ -96,6 +108,7 @@ class GameSettings {
 
   Map<String, dynamic> toJson() => {
         'roles': {for (final e in roles.entries) e.key.name: e.value},
+        'autoRoles': autoRoles,
         'nightSeconds': nightSeconds,
         'witchSeconds': witchSeconds,
         'discussionSeconds': discussionSeconds,
@@ -124,6 +137,7 @@ class GameSettings {
     final d = GameSettings();
     return GameSettings(
       roles: roles,
+      autoRoles: j['autoRoles'] == true,
       nightSeconds: sec('nightSeconds', d.nightSeconds),
       witchSeconds: sec('witchSeconds', d.witchSeconds),
       discussionSeconds: sec('discussionSeconds', d.discussionSeconds),

@@ -5,7 +5,7 @@ class Profile {
   Profile({
     required this.name,
     this.color = 0xFF7E57C2,
-    this.icon = 'wolf',
+    this.icon = '🐺',
     this.photo,
   });
 
@@ -14,7 +14,7 @@ class Profile {
   /// ARGB color for the avatar background.
   final int color;
 
-  /// Key of a built-in avatar icon.
+  /// Emoji shown on the avatar.
   final String icon;
 
   /// Optional small JPEG avatar, base64 encoded.
@@ -32,10 +32,13 @@ class Profile {
     return Profile(
       name: name,
       color: j['color'] is int ? j['color'] as int : 0xFF7E57C2,
-      icon: j['icon'] as String? ?? 'wolf',
+      icon: _cleanIcon(j['icon']),
       photo: (photo != null && photo.length <= maxPhotoLength) ? photo : null,
     );
   }
+
+  static String _cleanIcon(Object? v) =>
+      v is String && v.isNotEmpty && v.length <= 16 ? v : '🐺';
 
   Map<String, dynamic> toJson() => {
         'name': name,
