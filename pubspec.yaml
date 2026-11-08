@@ -1,0 +1,10 @@
+name: moonhowl_workspace
+publish_to: none
+
+environment:
+  sdk: ^3.11.0
+
+workspace:
+  - packages/howl_core
+  - packages/howl_net
+  - apps/mobile
