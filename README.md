@@ -65,6 +65,18 @@ flutter run            # on a connected phone or emulator
 - **Android:** `flutter build apk --release`
 - **iOS:** requires a Mac with Xcode. Run `cd apps/mobile && flutter build ios`, then sign the app in Xcode.
 
+### Thmanyah font (optional)
+
+The app uses the [Thmanyah Sans](https://font.thmanyah.com) font when its files are
+present, and the system font otherwise. Its license allows **personal use only** and
+does not allow redistributing the files, so they are not in this repo.
+
+1. Download Thmanyah Sans from [font.thmanyah.com](https://font.thmanyah.com).
+2. Copy its `.ttf` or `.otf` files (Sans only) into `apps/mobile/assets/fonts/`.
+3. Rebuild the app. Git ignores that folder, so the files are never committed.
+
+Check the license before shipping a build to other people or to an app store.
+
 To run all analyzers and tests:
 
 ```bash

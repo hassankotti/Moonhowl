@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'services/fonts.dart';
 import 'state/local_store.dart';
 import 'ui/screens/home_screen.dart';
 import 'ui/screens/profile_screen.dart';
@@ -9,7 +10,8 @@ import 'ui/theme.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final store = await LocalStore.load();
-  runApp(MoonhowlApp(store: store));
+  final font = await loadThmanyahFont();
+  runApp(MoonhowlApp(store: store, fontFamily: font));
 }
 
 /// Gives every screen the device's [LocalStore].
@@ -21,9 +23,12 @@ class AppScope extends InheritedNotifier<LocalStore> {
 }
 
 class MoonhowlApp extends StatelessWidget {
-  const MoonhowlApp({super.key, required this.store});
+  const MoonhowlApp({super.key, required this.store, this.fontFamily});
 
   final LocalStore store;
+
+  /// App-wide font, or null for the system font.
+  final String? fontFamily;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +39,7 @@ class MoonhowlApp extends StatelessWidget {
         builder: (context, _) => MaterialApp(
           title: 'Moonhowl',
           debugShowCheckedModeBanner: false,
-          theme: buildTheme(),
+          theme: buildTheme(fontFamily: fontFamily),
           locale: Locale(store.language),
           supportedLocales: const [Locale('ar'), Locale('en')],
           localizationsDelegates: const [

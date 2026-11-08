@@ -28,9 +28,10 @@ abstract final class Palette {
   static const avatarIcons = ['🐺', '🦊', '🐻', '🦉', '🐱', '🐶', '🐰', '🦁', '🐸', '🐼', '🦝', '🐯', '🦇', '🐍', '🦄', '🐲', '👻', '🎃', '🌙', '⭐'];
 }
 
-ThemeData buildTheme() {
+ThemeData buildTheme({String? fontFamily}) {
   final base = ThemeData(
     useMaterial3: true,
+    fontFamily: fontFamily,
     brightness: Brightness.dark,
     colorScheme: ColorScheme.fromSeed(
       seedColor: Palette.violet,

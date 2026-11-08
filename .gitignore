@@ -6,3 +6,7 @@ pubspec_overrides.yaml
 .idea/
 .vscode/
 .DS_Store
+
+# Thmanyah font files: personal-use license, never commit them.
+apps/mobile/assets/fonts/*
+!apps/mobile/assets/fonts/.gitkeep

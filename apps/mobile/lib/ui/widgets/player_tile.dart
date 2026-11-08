@@ -16,6 +16,7 @@ class PlayerTile extends StatelessWidget {
     this.badge,
     this.marks = const [],
     this.winner = false,
+    this.hideRole = false,
     this.onTap,
   });
 
@@ -32,6 +33,10 @@ class PlayerTile extends StatelessWidget {
   /// Small emoji marks, e.g. 🐺 for each wolf who picked this player.
   final List<String> marks;
   final bool winner;
+
+  /// Keep the role off the tile even if the viewer knows it, e.g. your own
+  /// role during the game, so people next to you can't read it.
+  final bool hideRole;
   final VoidCallback? onTap;
 
   @override
@@ -86,7 +91,7 @@ class PlayerTile extends StatelessWidget {
               ),
               if (player.isNarrator)
                 Text(s.t('narrator'), style: const TextStyle(fontSize: 10, color: Palette.moon))
-              else if (player.role != null)
+              else if (player.role != null && !hideRole)
                 FittedBox(child: RoleChip(role: player.role!, small: true)),
               if (marks.isNotEmpty) Text(marks.join(), style: const TextStyle(fontSize: 11)),
             ],
