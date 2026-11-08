@@ -1,38 +1,48 @@
-# عُواء القمر · Moonhowl
+# Moonhowl
 
-لعبة خداع اجتماعي (ذئاب وقرويون) تعمل **بدون إنترنت** على شبكة الواي فاي المحلية.
-أحد اللاعبين يفتح غرفة من هاتفه، والباقون ينضمون من هواتفهم على نفس الشبكة.
-لا حسابات ولا تسجيل دخول: الملف الشخصي محفوظ على الجهاز فقط.
+A social deduction game (wolves vs. villagers) for Android and iOS that runs
+**entirely on your local Wi-Fi, with no internet**. One player opens a room on their
+phone; everyone else joins from their own phone on the same network. There are no
+accounts and no sign-in: each player's profile lives only on their device.
 
-A local-Wi-Fi social deduction game for Android and iOS. One phone hosts, everyone
-else joins from their own phone. No internet, no accounts.
+The app is available in Arabic (right-to-left, the default) and English.
 
-## المزايا
+## Features
 
-- **ملف شخصي محلي:** اسم، صورة رمزية (إيموجي ولون أو صورة)، وإحصائيات (ألعاب، انتصارات، الدور الأكثر).
-- **استضافة على الهاتف:** هاتف المضيف يشغّل الخادم بنفسه، لا حاجة لأي جهاز آخر.
-- **الانضمام:** الغرف تظهر تلقائيًا على نفس الشبكة، أو بمسح رمز QR، أو بكتابة العنوان.
-- **الأدوار:** قروي، ذئب، العرّافة، الحارس، الساحرة، الصياد، العمدة، المهرّج.
-- **توزيع تلقائي متوازن** حسب عدد اللاعبين، أو يختار المضيف الأدوار بنفسه.
-- **مراحل اللعب:** ليل ← (الساحرة) ← نهار ونقاش ← تصويت ← (طلقة الصياد) مع مؤقت لكل مرحلة.
-- **الراوي:** راوٍ تلقائي يكتب ما يحدث ويوجّه كل لاعب حسب دوره، أو يكون المضيف راويًا بدون دور.
-- **ما يراه كل لاعب:** دورك فقط، والذئاب يرون بعضهم، والأدوار تُكشف عند الموت (اختياري)، والموتى يرون كل شيء (اختياري).
-- **الدردشة:** ساحة القرية، وكر الذئاب (سري)، المقبرة (للموتى)، رسائل خاصة، ومجموعات يُنشئها اللاعبون.
-- **أدوات المضيف:** إيقاف مؤقت، تخطي المرحلة، قفل الغرفة، كلمة سر، إخراج لاعب.
-- **إعادة اتصال تلقائية:** إذا انقطع الواي فاي يرجع اللاعب لنفس مقعده ودوره.
-- **الأجواء:** أصوات لليل والنهار والموت، اهتزاز عند دورك، واجهة ليلية داكنة، عربي (من اليمين لليسار) وإنجليزي.
+- **Local profile:** name, avatar (emoji on a color, or a photo), and personal stats
+  (games played, wins, win rate, most-played role).
+- **Phone-hosted rooms:** the host's phone runs the game server itself. No other
+  hardware is needed.
+- **Joining:** rooms show up automatically on the same network. Players can also scan
+  the room's QR code or type its address.
+- **Roles:** Villager, Wolf, Seer, Guardian, Witch, Hunter, Mayor, Jester.
+- **Balanced role setup:** roles are picked automatically for the number of players,
+  or the host chooses them.
+- **Game flow:** night → (witch) → day discussion → vote → (hunter's shot), with a
+  timer for every phase.
+- **Narrator:** an automatic narrator describes what happens and tells each player
+  what to do for their role. Alternatively, the host can act as narrator without a role.
+- **What each player sees:** only their own role. Wolves see each other. Roles can be
+  revealed on death, and dead players can see every role (both optional).
+- **Chat:** village square, a secret wolf den, a graveyard for the dead, private
+  messages, and group chats players create themselves.
+- **Host tools:** pause, skip phase, lock the room, room password, remove a player.
+- **Automatic reconnect:** if a player's Wi-Fi drops, they get back to the same seat
+  and role.
+- **Atmosphere:** sounds for night, day and deaths, vibration on your turn, and a dark
+  night-themed interface.
 
-## البنية (Monorepo)
+## Repository layout (monorepo)
 
 ```
-apps/mobile/          تطبيق Flutter (Android + iOS)
-packages/howl_core/   قواعد اللعبة: الأدوار، المراحل، التصويت، الفوز، صلاحيات الدردشة، البروتوكول (Dart فقط)
-packages/howl_net/    الخادم والعميل عبر WebSocket على الشبكة المحلية (dart:io فقط)
-tool/check.sh         تحليل واختبار كل الحزم
+apps/mobile/          Flutter app (Android + iOS)
+packages/howl_core/   Game rules: roles, phases, voting, win conditions, chat permissions, wire protocol (pure Dart)
+packages/howl_net/    LAN host server and client over WebSocket (dart:io only)
+tool/check.sh         Analyze and test every package
 ```
 
-The repo is a [pub workspace](https://dart.dev/tools/pub/workspaces): one `flutter pub get`
-at the root resolves every package.
+The repo is a [pub workspace](https://dart.dev/tools/pub/workspaces): one
+`flutter pub get` at the root resolves every package.
 
 - `howl_core` holds the only copy of the rules. It is pure Dart with an injected
   clock, so the whole game is unit-tested without a phone.
@@ -42,28 +52,31 @@ at the root resolves every package.
 - `apps/mobile` is the UI. Rooms are announced with Bonjour/NSD (`_moonhowl._tcp`)
   and shared as a QR code (`moonhowl://<ip>:<port>`).
 
-## التشغيل
+## Getting started
 
-المتطلبات: Flutter 3.47 أو أحدث.
+Requires Flutter 3.47 or later.
 
 ```bash
 flutter pub get
 cd apps/mobile
-flutter run            # على هاتف أو محاكي متصل
+flutter run            # on a connected phone or emulator
 ```
 
 - **Android:** `flutter build apk --release`
-- **iOS:** يحتاج جهاز Mac مع Xcode: `cd apps/mobile && flutter build ios` ثم التوقيع من Xcode.
+- **iOS:** requires a Mac with Xcode. Run `cd apps/mobile && flutter build ios`, then sign the app in Xcode.
 
-الاختبارات:
+To run all analyzers and tests:
 
 ```bash
 ./tool/check.sh
 ```
 
-## ملاحظات
+## Notes
 
-- يجب أن يبقى تطبيق المضيف مفتوحًا أثناء اللعب، فاللعبة كلها تعمل من هاتفه (الشاشة تبقى مضاءة تلقائيًا).
-- على iOS يطلب النظام إذن "الشبكة المحلية" في أول مرة؛ يجب الموافقة عليه للاستضافة والانضمام.
-- يمكن استخدام نقطة اتصال (Hotspot) هاتف المضيف بدل الراوتر.
-- إذا لم تظهر الغرفة في القائمة (بعض الشبكات تمنع الاكتشاف)، استخدم رمز QR أو اكتب العنوان الظاهر عند المضيف.
+- The host must keep the app open during the game, because the whole game runs on
+  their phone. The screen stays on automatically while hosting.
+- On iOS, the system asks for **Local Network** permission the first time. It must be
+  allowed to host or join.
+- The host's phone hotspot works in place of a Wi-Fi router.
+- If a room doesn't appear in the list (some networks block discovery), scan the QR
+  code or type the address shown on the host's screen.
