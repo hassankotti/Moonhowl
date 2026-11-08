@@ -31,3 +31,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/sounds/
+    # Optional Thmanyah Sans font files (not committed, see README).
+    - assets/fonts/

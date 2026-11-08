@@ -277,6 +277,7 @@ class _PlayersGrid extends StatelessWidget {
               PlayerTile(
                 player: p,
                 isYou: p.id == v.you,
+                hideRole: p.id == v.you && p.alive,
                 selectable: picking && targets.contains(p.id),
                 selected: v.myChoice == p.id,
                 badge: v.phase == Phase.voting && (v.voteTally[p.id] ?? 0) > 0 ? '${v.voteTally[p.id]}' : null,
