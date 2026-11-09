@@ -83,6 +83,12 @@ To run all analyzers and tests:
 ./tool/check.sh
 ```
 
+## Releasing
+
+Store builds, signing and the App Store / Google Play steps are in
+[docs/RELEASING.md](docs/RELEASING.md). Store listing copy is in `docs/store/`
+and the privacy policy is published from `docs/` via GitHub Pages.
+
 ## Notes
 
 - The host must keep the app open during the game, because the whole game runs on
