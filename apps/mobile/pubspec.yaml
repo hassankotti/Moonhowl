@@ -2,7 +2,7 @@ name: moonhowl
 description: "Moonhowl: a local Wi-Fi social deduction game."
 publish_to: 'none'
 resolution: workspace
-version: 0.1.0+1
+version: 1.0.0+1
 
 environment:
   sdk: ^3.13.7
